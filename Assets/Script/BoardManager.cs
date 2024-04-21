@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Alchemy.Inspector;
-using UnityEngine.UIElements;
+using Array2DEditor;
 
 public class BoardManager : MonoBehaviour
 {
@@ -23,13 +23,19 @@ public class BoardManager : MonoBehaviour
     }
 
     #region BoardBlockArray
-    public static Block[,,] cubeBlockArray { get; private set; } = new Block[3, 3, 3];
-    public static int[,] positiveXBlockArray { get; private set; } = new int[3, 3];
-    public static int[,] negativeXBlockArray { get; private set; } = new int[3, 3];
-    public static int[,] positiveYBlockArray { get; private set; } = new int[3, 3];
-    public static int[,] negativeYBlockArray { get; private set; } = new int[3, 3];
-    public static int[,] positiveZBlockArray { get; private set; } = new int[3, 3];
-    public static int[,] negativeZBlockArray { get; private set; } = new int[3, 3];
+    Block[,,] cubeBlockArray = new Block[3, 3, 3];
+    [SerializeField]
+    Array2DInt positiveXBlockArray = null;
+    [SerializeField]
+    Array2DInt negativeXBlockArray = null;
+    [SerializeField]
+    Array2DInt positiveYBlockArray = null;
+    [SerializeField]
+    Array2DInt negativeYBlockArray = null;
+    [SerializeField]
+    Array2DInt positiveZBlockArray = null;
+    [SerializeField]
+    Array2DInt negativeZBlockArray = null;
     #endregion
 
     [LabelText("Interface用ブロックを子に持つオブジェクト")]
@@ -39,6 +45,41 @@ public class BoardManager : MonoBehaviour
 
     void Start()
     {
+        cubeBlockArray = new Block[3, 3, 3];
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    cubeBlockArray[x, y, z] = new Block
+                    {
+                        existBlock = false,
+                        blockFaceTypeArray = new FaceType[6]
+                    };
+                }
+            }
+        }
+
+        positiveXBlockArray.SetGridSize(new Vector2Int(3, 3));
+        negativeXBlockArray.SetGridSize(new Vector2Int(3, 3));
+        positiveYBlockArray.SetGridSize(new Vector2Int(3, 3));
+        negativeYBlockArray.SetGridSize(new Vector2Int(3, 3));
+        positiveZBlockArray.SetGridSize(new Vector2Int(3, 3));
+        negativeZBlockArray.SetGridSize(new Vector2Int(3, 3));
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                positiveXBlockArray.SetCell(i, j, (int)FaceType.Blank);
+                negativeXBlockArray.SetCell(i, j, (int)FaceType.Blank);
+                positiveYBlockArray.SetCell(i, j, (int)FaceType.Blank);
+                negativeYBlockArray.SetCell(i, j, (int)FaceType.Blank);
+                positiveZBlockArray.SetCell(i, j, (int)FaceType.Blank);
+                negativeZBlockArray.SetCell(i, j, (int)FaceType.Blank);
+            }
+        }
+
         boardInterfaceBlockArray = new List<List<List<GameObject>>>();
         for (int x = 0; x < 3; x++)
         {
@@ -55,6 +96,8 @@ public class BoardManager : MonoBehaviour
             }
             boardInterfaceBlockArray.Add(xItems);
         }
+        ReflectFaceBlockArray();
+        ReflectBlockDataToInterfaceBlock();
     }
 
     public List<GameObject> GetTurnTargetObjectsArray(int x, int y, int z)
@@ -84,19 +127,13 @@ public class BoardManager : MonoBehaviour
             return false;
         }
         cubeBlockArray[xIndex, yIndex, zIndex] = block;
+        ReflectFaceBlockArray();
         ReflectBlockDataToInterfaceBlock();
         return true;
     }
 
-    public void SetFaceBlockArray()
+    public void ReflectFaceBlockArray()
     {
-        //  #####    #######  ######   ##   ##    ####            ##  ##     ##     ######   ##   ##  ######    #####   ###  ##   #####
-        //   ## ##    ##   #   ##  ##  ##   ##   ##  ##           ##  ##    ####     ##  ##  ##   ##  # ## #   ##   ##   ##  ##  ##   ##
-        //   ##  ##   ## #     ##  ##  ##   ##  ##                ##  ##   ##  ##    ##  ##  ##   ##    ##     ##   ##   ## ##   ##   ##
-        //   ##  ##   ####     #####   ##   ##  ##                 ####    ##  ##    #####   ##   ##    ##     ##   ##   ####    ##   ##
-        //   ##  ##   ## #     ##  ##  ##   ##  ##  ###             ##     ######    ## ##   ##   ##    ##     ##   ##   ## ##   ##   ##
-        //   ## ##    ##   #   ##  ##  ##   ##   ##  ##             ##     ##  ##    ##  ##  ##   ##    ##     ##   ##   ##  ##  ##   ##
-        //  #####    #######  ######    #####     #####            ####    ##  ##   #### ##   #####    ####     #####   ###  ##   #####
         // cubeBlockArrayを元に各面の表面にあたるブロックの配列を作成する
         for (int row = 0; row < 3; row++)
         {
@@ -107,13 +144,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        positiveXBlockArray[row, column] = (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[0];
+                        positiveXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[0]);
                         break;
                     }
 
                     else if (depth == 2)
                     {
-                        positiveXBlockArray[row, column] = (int)FaceType.Blank;
+                        positiveXBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
 
@@ -123,13 +160,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        negativeXBlockArray[row, column] = (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[1];
+                        negativeXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[1]);
                         break;
                     }
 
                     else if (depth == 0)
                     {
-                        negativeXBlockArray[row, column] = (int)FaceType.Blank;
+                        negativeXBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
 
@@ -139,13 +176,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        positiveYBlockArray[row, column] = (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[2];
+                        positiveYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[2]);
                         break;
                     }
 
                     else if (depth == 2)
                     {
-                        positiveYBlockArray[row, column] = (int)FaceType.Blank;
+                        positiveYBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
 
@@ -154,13 +191,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        negativeYBlockArray[row, column] = (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[3];
+                        negativeYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[3]);
                         break;
                     }
 
                     else if (depth == 0)
                     {
-                        negativeYBlockArray[row, column] = (int)FaceType.Blank;
+                        negativeYBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
 
@@ -169,13 +206,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        positiveZBlockArray[row, column] = (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[4];
+                        positiveZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[4]);
                         break;
                     }
 
                     else if (depth == 2)
                     {
-                        positiveZBlockArray[row, column] = (int)FaceType.Blank;
+                        positiveZBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
 
@@ -184,13 +221,13 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        negativeZBlockArray[row, column] = (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[5];
+                        negativeZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[5]);
                         break;
                     }
 
                     else if (depth == 0)
                     {
-                        negativeZBlockArray[row, column] = (int)FaceType.Blank;
+                        negativeZBlockArray.SetCell(row, column, (int)FaceType.Blank);
                     }
                 }
             }
@@ -210,5 +247,15 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public Block GetBoardBlock(in int xIndex, in int yIndex, in int zIndex)
+    {
+        if (xIndex < 0 || xIndex >= 3 || yIndex < 0 || yIndex >= 3 || zIndex < 0 || zIndex >= 3)
+        {
+            Debug.LogError("Invalid index");
+            return new Block();
+        }
+        return cubeBlockArray[xIndex, yIndex, zIndex];
     }
 }

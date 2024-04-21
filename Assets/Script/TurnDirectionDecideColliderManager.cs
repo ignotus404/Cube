@@ -42,19 +42,19 @@ public class TurnDirectionDecideColliderManager : MonoBehaviour
                 {
                     if (x == northCollider)
                     {
-                        inputReceiverController.receiveRotateAngleSubject.OnNext(turnDirectionNorth);
+                        inputReceiverController.BlockTurnEventPublish(turnDirectionNorth);
                     }
                     else if (x == eastCollider)
                     {
-                        inputReceiverController.receiveRotateAngleSubject.OnNext(turnDirectionEast);
+                        inputReceiverController.BlockTurnEventPublish(turnDirectionEast);
                     }
                     else if (x == southCollider)
                     {
-                        inputReceiverController.receiveRotateAngleSubject.OnNext(turnDirectionSouth);
+                        inputReceiverController.BlockTurnEventPublish(turnDirectionSouth);
                     }
                     else if (x == westCollider)
                     {
-                        inputReceiverController.receiveRotateAngleSubject.OnNext(turnDirectionWest);
+                        inputReceiverController.BlockTurnEventPublish(turnDirectionWest);
                     }
                 }
             );

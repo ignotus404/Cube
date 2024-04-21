@@ -1,9 +1,9 @@
 using UnityEngine;
-using Kogane;
-using System;
-using Alchemy.Inspector;
 using UnityEngine.InputSystem;
+using System;
 using System.Collections.Generic;
+using Kogane;
+using Alchemy.Inspector;
 using R3;
 using DG.Tweening;
 
@@ -20,8 +20,6 @@ public class InputReceiverController : MonoBehaviour
     [LabelText("Interface用ブロックを子に持つオブジェクト")]
     [SerializeField]
     BoardManager interfaceBlockParent;
-    public Subject<Vector3> receiveRotateAngleSubject = new Subject<Vector3>();
-    Observable<Vector3> receiveRotateAngleObservable => receiveRotateAngleSubject;
     List<GameObject> rowTargetObjects = new List<GameObject>();
     List<GameObject> columnTargetObjects = new List<GameObject>();
     bool rotateDirectionIsVertical = false; // true: 縦方向, false: 横方向
@@ -30,7 +28,9 @@ public class InputReceiverController : MonoBehaviour
     {
         playerInput = new PlayerAction();
         playerInput.Enable();
-        playerInput.Player.Move.performed += ctx =>
+
+        InputSystemExtensions.PerformedAsObservable(playerInput.Player.Move)
+        .Subscribe(ctx =>
         {
             switch (ctx.ReadValue<Vector2>())
             {
@@ -55,29 +55,7 @@ public class InputReceiverController : MonoBehaviour
                     CastMoveDirectionDecideRay(transform.up);
                     break;
             }
-        };
-
-        receiveRotateAngleObservable
-            .Subscribe
-            (
-                x =>
-                {
-                    if (rotateDirectionIsVertical)
-                    {
-                        foreach (var item in rowTargetObjects)
-                        {
-                            item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(x);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in columnTargetObjects)
-                        {
-                            item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(x);
-                        }
-                    }
-                }
-            );
+        }).AddTo(this);
     }
 
     void FixedUpdate()
@@ -130,6 +108,24 @@ public class InputReceiverController : MonoBehaviour
         {
             Debug.Log("Hit: " + hit.collider.name);
             selectedFace.turnDirectionDecidedSubject.OnNext(hit.collider.gameObject);
+        }
+    }
+
+    public void BlockTurnEventPublish(Vector3 rotateAngle)
+    {
+        if (rotateDirectionIsVertical)
+        {
+            foreach (var item in rowTargetObjects)
+            {
+                item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(rotateAngle);
+            }
+        }
+        else
+        {
+            foreach (var item in columnTargetObjects)
+            {
+                item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(rotateAngle);
+            }
         }
     }
 }
