@@ -38,7 +38,9 @@ public class FallingBlockManager : MonoBehaviour
             {
                 Debug.Log("x:" + xIndex + " z:" + zIndex + " depth:" + depth);
                 BoardManager.Block fallingBlock = new BoardManager.Block();
+                fallingBlock.existBlock = true;
                 fallingBlock.blockFaceTypeArray = new BoardManager.FaceType[6];
+
                 fallingBlock.blockFaceTypeArray[0] = BoardManager.FaceType.Red;
                 fallingBlock.blockFaceTypeArray[1] = BoardManager.FaceType.Blue;
                 fallingBlock.blockFaceTypeArray[2] = BoardManager.FaceType.Green;

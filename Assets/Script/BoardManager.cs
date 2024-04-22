@@ -9,6 +9,14 @@ public class BoardManager : MonoBehaviour
     {
         public bool existBlock;
         public FaceType[] blockFaceTypeArray;
+
+        public Block(bool existBlock, FaceType[] blockFaceTypeArray)
+        {
+            this.existBlock = true;
+            this.blockFaceTypeArray = new FaceType[6];
+            Debug.Log(this.existBlock);
+            Debug.Log(this.blockFaceTypeArray);
+        }
     }
 
     public enum FaceType
