@@ -51,7 +51,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "My project (1).sln",
+    "dotnet.defaultSolution": "Cube.sln",
     "cSpell.words": [
         "Mathf",
         "Tweening"

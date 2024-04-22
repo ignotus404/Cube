@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Alchemy.Inspector;
 using DG.Tweening;
+using System.Linq;
 
 public class BlockManager : MonoBehaviour
 {
@@ -68,31 +69,7 @@ public class BlockManager : MonoBehaviour
             emptyBlockObject.SetActive(false);
             existBlockObject.SetActive(true);
 
-            foreach (BoardManager.FaceType faceType in block.blockFaceTypeArray)
-            {
-                // ブロックの色に応じて、ブロックの色を変更する処理
-                switch (faceType)
-                {
-                    case BoardManager.FaceType.Red:
-                        existBlockObject.GetComponent<Renderer>().material = redMaterial;
-                        break;
-                    case BoardManager.FaceType.Blue:
-                        existBlockObject.GetComponent<Renderer>().material = blueMaterial;
-                        break;
-                    case BoardManager.FaceType.Green:
-                        existBlockObject.GetComponent<Renderer>().material = greenMaterial;
-                        break;
-                    case BoardManager.FaceType.Yellow:
-                        existBlockObject.GetComponent<Renderer>().material = yellowMaterial;
-                        break;
-                    case BoardManager.FaceType.Orange:
-                        existBlockObject.GetComponent<Renderer>().material = orangeMaterial;
-                        break;
-                    case BoardManager.FaceType.White:
-                        existBlockObject.GetComponent<Renderer>().material = whiteMaterial;
-                        break;
-                }
-            }
+
         }
         else
         {
