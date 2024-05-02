@@ -4,6 +4,7 @@ using UnityEngine;
 using Alchemy.Inspector;
 using DG.Tweening;
 using System.Linq;
+using System;
 
 public class BlockManager : MonoBehaviour
 {
@@ -69,7 +70,33 @@ public class BlockManager : MonoBehaviour
             emptyBlockObject.SetActive(false);
             existBlockObject.SetActive(true);
 
-
+            foreach (var faceType in block.blockFaceTypeArray.Select((Value, Index) => new { Value, Index }))
+            {
+                switch (faceType.Value)
+                {
+                    case BoardManager.FaceType.Red:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = redMaterial;
+                        break;
+                    case BoardManager.FaceType.Blue:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = blueMaterial;
+                        break;
+                    case BoardManager.FaceType.Green:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = greenMaterial;
+                        break;
+                    case BoardManager.FaceType.Yellow:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = yellowMaterial;
+                        break;
+                    case BoardManager.FaceType.Orange:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = orangeMaterial;
+                        break;
+                    case BoardManager.FaceType.White:
+                        existBlockObject.transform.GetChild(faceType.Index).GetComponent<Renderer>().material = whiteMaterial;
+                        break;
+                    default:
+                        Debug.LogError("存在しない色が指定されました");
+                        break;
+                }
+            }
         }
         else
         {
