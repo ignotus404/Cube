@@ -57,6 +57,7 @@ public class TurnDirectionDecideColliderManager : MonoBehaviour
                         inputReceiverController.BlockTurnEventPublish(turnDirectionWest);
                     }
                 }
-            );
+            )
+            .AddTo(this);
     }
 }
