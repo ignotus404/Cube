@@ -108,7 +108,7 @@ public class BlockManager : MonoBehaviour
                     transform.position = defaultPosition;
                     transform.rotation = Quaternion.Euler(defaultRotation);
                 },
-                    AwaitOperation.Drop)
+                AwaitOperation.Drop)
                 .AddTo(this);
 
     }

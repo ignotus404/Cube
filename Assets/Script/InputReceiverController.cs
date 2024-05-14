@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Kogane;
 using Alchemy.Inspector;
 using R3;
-using DG.Tweening;
 
 public class InputReceiverController : MonoBehaviour
 {
@@ -29,7 +28,7 @@ public class InputReceiverController : MonoBehaviour
         playerInput.Enable();
 
         InputSystemExtensions.PerformedAsObservable(playerInput.Player.Move)
-        .Subscribe(ctx =>
+        .SubscribeAwait(async (ctx, ct) =>
         {
             switch (ctx.ReadValue<Vector2>())
             {
@@ -54,7 +53,9 @@ public class InputReceiverController : MonoBehaviour
                     CastMoveDirectionDecideRay(transform.up);
                     break;
             }
-        }).AddTo(this);
+        },
+        AwaitOperation.Drop)
+        .AddTo(this);
     }
 
     void FixedUpdate()
