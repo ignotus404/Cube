@@ -4106,11 +4106,11 @@ MonoBehaviour:
   northCollider: {fileID: 1395479736}
   turnDirectionNorth: {x: 0, y: 0, z: 90}
   eastCollider: {fileID: 1086669321}
-  turnDirectionEast: {x: 90, y: 0, z: 0}
+  turnDirectionEast: {x: -90, y: 0, z: 0}
   southCollider: {fileID: 1291080349}
   turnDirectionSouth: {x: 0, y: 0, z: -90}
   westCollider: {fileID: 2037661963}
-  turnDirectionWest: {x: -90, y: 0, z: 0}
+  turnDirectionWest: {x: 90, y: 0, z: 0}
 --- !u!1 &679835760
 GameObject:
   m_ObjectHideFlags: 0
@@ -5683,11 +5683,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReceiverController: {fileID: 1079719842}
   northCollider: {fileID: 1395479736}
-  turnDirectionNorth: {x: 0, y: 0, z: 90}
+  turnDirectionNorth: {x: 0, y: 0, z: -90}
   eastCollider: {fileID: 2037661963}
   turnDirectionEast: {x: 90, y: 0, z: 0}
   southCollider: {fileID: 1291080349}
-  turnDirectionSouth: {x: 0, y: 0, z: -90}
+  turnDirectionSouth: {x: 0, y: 0, z: 90}
   westCollider: {fileID: 1086669321}
   turnDirectionWest: {x: -90, y: 0, z: 0}
 --- !u!1 &964702818
@@ -6192,7 +6192,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   mainCamera: {fileID: 1085593934}
-  interfaceBlockParent: {fileID: 541087845}
 --- !u!1 &1085593932
 GameObject:
   m_ObjectHideFlags: 0
@@ -7849,11 +7848,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReceiverController: {fileID: 1079719842}
   northCollider: {fileID: 940385617}
-  turnDirectionNorth: {x: 0, y: 0, z: 90}
-  eastCollider: {fileID: 1086669321}
+  turnDirectionNorth: {x: 0, y: 0, z: -90}
+  eastCollider: {fileID: 2037661963}
   turnDirectionEast: {x: 0, y: 90, z: 0}
   southCollider: {fileID: 671276791}
-  turnDirectionSouth: {x: 0, y: 0, z: -90}
+  turnDirectionSouth: {x: 0, y: 0, z: 90}
   westCollider: {fileID: 1086669321}
   turnDirectionWest: {x: 0, y: -90, z: 0}
 --- !u!1 &1311893489
@@ -8305,11 +8304,11 @@ MonoBehaviour:
   northCollider: {fileID: 940385617}
   turnDirectionNorth: {x: 0, y: 0, z: 90}
   eastCollider: {fileID: 1086669321}
-  turnDirectionEast: {x: 0, y: 90, z: 0}
+  turnDirectionEast: {x: 0, y: -90, z: 0}
   southCollider: {fileID: 671276791}
   turnDirectionSouth: {x: 0, y: 0, z: -90}
   westCollider: {fileID: 2037661963}
-  turnDirectionWest: {x: 0, y: -90, z: 0}
+  turnDirectionWest: {x: 0, y: 90, z: 0}
 --- !u!1001 &1418935655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11757,14 +11756,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReceiverController: {fileID: 1079719842}
-  northCollider: {fileID: 1086669321}
-  turnDirectionNorth: {x: -90, y: 0, z: 0}
+  northCollider: {fileID: 940385617}
+  turnDirectionNorth: {x: 90, y: 0, z: 0}
   eastCollider: {fileID: 1395479736}
-  turnDirectionEast: {x: 0, y: -90, z: 0}
+  turnDirectionEast: {x: 0, y: 90, z: 0}
   southCollider: {fileID: 671276791}
-  turnDirectionSouth: {x: 90, y: 0, z: 0}
+  turnDirectionSouth: {x: -90, y: 0, z: 0}
   westCollider: {fileID: 1291080349}
-  turnDirectionWest: {x: 0, y: 90, z: 0}
+  turnDirectionWest: {x: 0, y: -90, z: 0}
 --- !u!43 &2048447465
 Mesh:
   m_ObjectHideFlags: 0

@@ -5,30 +5,8 @@ using Array2DEditor;
 
 public class BoardManager : MonoBehaviour
 {
-    public struct Block
-    {
-        public bool existBlock;
-        public FaceType[] blockFaceTypeArray;
 
-        public Block(bool existBlock, FaceType[] blockFaceTypeArray)
-        {
-            this.existBlock = true;
-            this.blockFaceTypeArray = new FaceType[6];
-            Debug.Log(this.existBlock);
-            Debug.Log(this.blockFaceTypeArray);
-        }
-    }
-
-    public enum FaceType
-    {
-        Blank = -1,
-        Red = 0,
-        Blue = 1,
-        Green = 2,
-        Yellow = 3,
-        Orange = 4,
-        White = 5,
-    }
+    public static BoardManager instance { get; private set; }
 
     #region BoardBlockArray
     Block[,,] cubeBlockArray = new Block[3, 3, 3];
@@ -51,6 +29,19 @@ public class BoardManager : MonoBehaviour
     GameObject interfaceBlockParent;
     List<List<List<GameObject>>> boardInterfaceBlockArray = new List<List<List<GameObject>>>();
 
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+
     void Start()
     {
         cubeBlockArray = new Block[3, 3, 3];
@@ -60,11 +51,7 @@ public class BoardManager : MonoBehaviour
             {
                 for (int z = 0; z < 3; z++)
                 {
-                    cubeBlockArray[x, y, z] = new Block
-                    {
-                        existBlock = false,
-                        blockFaceTypeArray = new FaceType[6]
-                    };
+                    cubeBlockArray[x, y, z] = new Block();
                 }
             }
         }
@@ -128,16 +115,26 @@ public class BoardManager : MonoBehaviour
         return targetObjectsArray;
     }
 
-    public bool SetBoardBlock(in int xIndex, in int yIndex, in int zIndex, in Block block)
+    public Block GetBoardBlock(in int xIndex, in int yIndex, in int zIndex)
     {
         if (xIndex < 0 || xIndex >= 3 || yIndex < 0 || yIndex >= 3 || zIndex < 0 || zIndex >= 3)
         {
-            return false;
+            Debug.LogError("Invalid index");
+            return new Block();
+        }
+        return cubeBlockArray[xIndex, yIndex, zIndex];
+    }
+
+    public void SetBoardBlock(in int xIndex, in int yIndex, in int zIndex, in Block block)
+    {
+        if (xIndex < 0 || xIndex >= 3 || yIndex < 0 || yIndex >= 3 || zIndex < 0 || zIndex >= 3)
+        {
+            Debug.LogError("Invalid index");
+            return;
         }
         cubeBlockArray[xIndex, yIndex, zIndex] = block;
         ReflectFaceBlockArray();
         ReflectBlockDataToInterfaceBlock();
-        return true;
     }
 
     public void ReflectFaceBlockArray()
@@ -152,7 +149,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        positiveXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[0]);
+                        positiveXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["X"]["PositiveX"]);
                         break;
                     }
 
@@ -168,7 +165,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        negativeXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeArray[1]);
+                        negativeXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["X"]["NegativeX"]);
                         break;
                     }
 
@@ -184,7 +181,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        positiveYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[2]);
+                        positiveYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["Y"]["PositiveY"]);
                         break;
                     }
 
@@ -199,7 +196,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        negativeYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeArray[3]);
+                        negativeYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["Y"]["NegativeY"]);
                         break;
                     }
 
@@ -214,7 +211,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        positiveZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[4]);
+                        positiveZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["Z"]["PositiveZ"]);
                         break;
                     }
 
@@ -229,7 +226,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        negativeZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeArray[5]);
+                        negativeZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["Z"]["NegativeZ"]);
                         break;
                     }
 
@@ -257,13 +254,97 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public Block GetBoardBlock(in int xIndex, in int yIndex, in int zIndex)
+    public void TurnBlock(Vector3 rotateAngle, Vector3 targetIndex)
     {
-        if (xIndex < 0 || xIndex >= 3 || yIndex < 0 || yIndex >= 3 || zIndex < 0 || zIndex >= 3)
+        Block[,,] newCubeBlockArray = new Block[3, 3, 3];
+        for (int x = 0; x < 3; x++)
         {
-            Debug.LogError("Invalid index");
-            return new Block();
+            for (int y = 0; y < 3; y++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    newCubeBlockArray[x, y, z] = cubeBlockArray[x, y, z];
+                }
+            }
         }
-        return cubeBlockArray[xIndex, yIndex, zIndex];
+
+        if (rotateAngle.x != 0)
+        {
+            // X軸を中心に回転
+            int xIndex = (int)targetIndex.x;
+            Block[] tempBlockArray = new Block[3];
+            for (int i = 0; i < 3; i++)
+            {
+                tempBlockArray[i] = newCubeBlockArray[xIndex, i, (int)targetIndex.z];
+            }
+
+            if (rotateAngle.x > 0)
+            {
+                // 反時計回り
+                newCubeBlockArray[xIndex, 0, (int)targetIndex.z] = tempBlockArray[2];
+                newCubeBlockArray[xIndex, 1, (int)targetIndex.z] = tempBlockArray[0];
+                newCubeBlockArray[xIndex, 2, (int)targetIndex.z] = tempBlockArray[1];
+            }
+            else
+            {
+                // 時計回り
+                newCubeBlockArray[xIndex, 0, (int)targetIndex.z] = tempBlockArray[1];
+                newCubeBlockArray[xIndex, 1, (int)targetIndex.z] = tempBlockArray[2];
+                newCubeBlockArray[xIndex, 2, (int)targetIndex.z] = tempBlockArray[0];
+            }
+        }
+        else if (rotateAngle.y != 0)
+        {
+            // Y軸を中心に回転
+            int yIndex = (int)targetIndex.y;
+            Block[] tempBlockArray = new Block[3];
+            for (int i = 0; i < 3; i++)
+            {
+                tempBlockArray[i] = newCubeBlockArray[i, yIndex, (int)targetIndex.z];
+            }
+
+            if (rotateAngle.y > 0)
+            {
+                // 反時計回り
+                newCubeBlockArray[0, yIndex, (int)targetIndex.z] = tempBlockArray[2];
+                newCubeBlockArray[1, yIndex, (int)targetIndex.z] = tempBlockArray[0];
+                newCubeBlockArray[2, yIndex, (int)targetIndex.z] = tempBlockArray[1];
+            }
+            else
+            {
+                // 時計回り
+                newCubeBlockArray[0, yIndex, (int)targetIndex.z] = tempBlockArray[1];
+                newCubeBlockArray[1, yIndex, (int)targetIndex.z] = tempBlockArray[2];
+                newCubeBlockArray[2, yIndex, (int)targetIndex.z] = tempBlockArray[0];
+            }
+        }
+        else if (rotateAngle.z != 0)
+        {
+            // Z軸を中心に回転
+            int zIndex = (int)targetIndex.z;
+            Block[] tempBlockArray = new Block[3];
+            for (int i = 0; i < 3; i++)
+            {
+                tempBlockArray[i] = newCubeBlockArray[(int)targetIndex.x, i, zIndex];
+            }
+
+            if (rotateAngle.z > 0)
+            {
+                // 反時計回り
+                newCubeBlockArray[0, 0, zIndex] = tempBlockArray[2];
+                newCubeBlockArray[1, 0, zIndex] = tempBlockArray[0];
+                newCubeBlockArray[2, 0, zIndex] = tempBlockArray[1];
+            }
+            else
+            {
+                // 時計回り
+                newCubeBlockArray[0, 0, zIndex] = tempBlockArray[1];
+                newCubeBlockArray[1, 0, zIndex] = tempBlockArray[2];
+                newCubeBlockArray[2, 0, zIndex] = tempBlockArray[0];
+            }
+        }
+        cubeBlockArray = newCubeBlockArray;
+        ReflectFaceBlockArray();
+        ReflectBlockDataToInterfaceBlock();
     }
 }

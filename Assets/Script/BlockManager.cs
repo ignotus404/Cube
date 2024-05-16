@@ -1,12 +1,58 @@
 using R3;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using Alchemy.Inspector;
 using DG.Tweening;
-using System.Linq;
+using SerializeDictionary;
+using Kogane;
+using TMPro;
+using System.Security.Cryptography.X509Certificates;
+
+public class Block
+{
+    public int blockXIndex;
+    public int blockYIndex;
+    public int blockZIndex;
+    public bool existBlock;
+    public Dictionary<string, Dictionary<string, FaceType>> blockFaceTypeDictionary;
+
+    public Block(bool existBlock = false, FaceType[] faceTypeArray = null)
+    {
+        this.existBlock = existBlock;
+        this.blockFaceTypeDictionary = new Dictionary<string, Dictionary<string, FaceType>>();
+        if (faceTypeArray == null)
+        {
+            faceTypeArray = new FaceType[6]
+            {
+                FaceType.Blank,
+                FaceType.Blank,
+                FaceType.Blank,
+                FaceType.Blank,
+                FaceType.Blank,
+                FaceType.Blank
+            };
+        }
+        this.blockFaceTypeDictionary.Add("X", new Dictionary<string, FaceType> { { "PositiveX", faceTypeArray[0] }, { "NegativeX", faceTypeArray[1] } });
+        this.blockFaceTypeDictionary.Add("Y", new Dictionary<string, FaceType> { { "PositiveY", faceTypeArray[2] }, { "NegativeY", faceTypeArray[3] } });
+        this.blockFaceTypeDictionary.Add("Z", new Dictionary<string, FaceType> { { "PositiveZ", faceTypeArray[4] }, { "NegativeZ", faceTypeArray[5] } });
+    }
+}
+
+public enum FaceType
+{
+    Blank = -1,
+    Red = 0,
+    Blue = 1,
+    Green = 2,
+    Yellow = 3,
+    Orange = 4,
+    White = 5,
+}
 
 public class BlockManager : MonoBehaviour
 {
+    #region ブロックのオブジェクト、マテリアル
     [LabelText("ブロックが存在しないときのオブジェクト")]
     public GameObject emptyBlockObject;
     [LabelText("ブロックが存在するときのオブジェクト")]
@@ -29,6 +75,20 @@ public class BlockManager : MonoBehaviour
     [FoldoutGroup("ブロックの色のマテリアル")]
     [LabelText("白色のマテリアル")]
     public Material whiteMaterial;
+    # endregion
+
+    # region ブロックの面オブジェクト
+    [LabelText("ブロックの面オブジェクトのDictionary")]
+    public SerializableDictionary<string, GameObject> blockFaceObjectDictionary = new SerializableDictionary<string, GameObject>
+    {
+        { "PositiveX", null },
+        { "NegativeX", null },
+        { "PositiveY", null },
+        { "NegativeY", null },
+        { "PositiveZ", null },
+        { "NegativeZ", null },
+    };
+    #endregion
 
     [LabelText("公転するブロックの座標")]
     public Transform pivotObjectPosition;
@@ -43,12 +103,12 @@ public class BlockManager : MonoBehaviour
                 {
                     Vector3 defaultPosition = transform.position;
                     Vector3 defaultRotation = transform.rotation.eulerAngles;
-                    await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 0.1f)
+                    await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 1.0f)
                         .AsyncWaitForCompletion();
                     transform.position = defaultPosition;
                     transform.rotation = Quaternion.Euler(defaultRotation);
                 },
-                    AwaitOperation.Drop)
+                AwaitOperation.Drop)
                 .AddTo(this);
 
     }
@@ -60,7 +120,7 @@ public class BlockManager : MonoBehaviour
         prevVal = rotateAngle;
     }
 
-    public void ReflectBlockColor(BoardManager.Block block)
+    public void ReflectBlockColor(Block block)
     {
         // ブロックの色を設定する処理
         if (block.existBlock)
@@ -69,7 +129,38 @@ public class BlockManager : MonoBehaviour
             emptyBlockObject.SetActive(false);
             existBlockObject.SetActive(true);
 
-
+            foreach (KeyValuePair<string, Dictionary<string, FaceType>> dictionary in block.blockFaceTypeDictionary)
+            {
+                foreach (KeyValuePair<string, FaceType> faceType in dictionary.Value)
+                {
+                    FaceType faceTypeValue = faceType.Value;
+                    string faceTypeIndex = faceType.Key;
+                    switch (faceTypeValue)
+                    {
+                        case FaceType.Red:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = redMaterial;
+                            break;
+                        case FaceType.Blue:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = blueMaterial;
+                            break;
+                        case FaceType.Green:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = greenMaterial;
+                            break;
+                        case FaceType.Yellow:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = yellowMaterial;
+                            break;
+                        case FaceType.Orange:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = orangeMaterial;
+                            break;
+                        case FaceType.White:
+                            blockFaceObjectDictionary[faceTypeIndex].GetComponent<MeshRenderer>().material = whiteMaterial;
+                            break;
+                        default:
+                            Debug.LogError("FaceTypeが不正です");
+                            break;
+                    }
+                }
+            }
         }
         else
         {
