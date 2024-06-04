@@ -20,7 +20,6 @@ public class InputReceiverController : MonoBehaviour
     [SerializeField]
     (Vector3 gotObjectIndex, List<GameObject> getObject) rowTargetObjects = new(Vector3.zero, new List<GameObject>());
     (Vector3 gotObjectIndex, List<GameObject> getObject) columnTargetObjects = new(Vector3.zero, new List<GameObject>());
-    bool rotateDirectionIsVertical = false; // true: 縦方向, false: 横方向
 
     void Awake()
     {
@@ -30,31 +29,46 @@ public class InputReceiverController : MonoBehaviour
         InputSystemExtensions.PerformedAsObservable(playerInput.Player.Move)
         .SubscribeAwait(async (ctx, ct) =>
         {
+            bool turnDirectionIsVertical = false;
+            Vector3 rotateAxis = Vector3.zero;
             switch (ctx.ReadValue<Vector2>())
             {
                 case var (x, _) when x < 0:
                     Debug.Log("Right");
-                    rotateDirectionIsVertical = false;
-                    CastMoveDirectionDecideRay(transform.right);
+                    (turnDirectionIsVertical, rotateAxis) = CastMoveDirectionDecideRay(transform.right);
                     break;
                 case var (x, _) when x > 0:
                     Debug.Log("Left");
-                    rotateDirectionIsVertical = false;
-                    CastMoveDirectionDecideRay(-transform.right);
+                    (turnDirectionIsVertical, rotateAxis) = CastMoveDirectionDecideRay(-transform.right);
                     break;
                 case var (_, y) when y < 0:
                     Debug.Log("Down");
-                    rotateDirectionIsVertical = true;
-                    CastMoveDirectionDecideRay(-transform.up);
+                    (turnDirectionIsVertical, rotateAxis) = CastMoveDirectionDecideRay(-transform.up);
                     break;
                 case var (_, y) when y > 0:
                     Debug.Log("Up");
-                    rotateDirectionIsVertical = true;
-                    CastMoveDirectionDecideRay(transform.up);
+                    (turnDirectionIsVertical, rotateAxis) = CastMoveDirectionDecideRay(transform.up);
                     break;
             }
-        },
-        AwaitOperation.Drop)
+
+            if (turnDirectionIsVertical)
+            {
+                foreach (var item in rowTargetObjects.getObject)
+                {
+                    await item.GetComponent<BlockManager>().TurnBlock(rotateAxis);
+                }
+                BoardManager.instance.TurnBlock(rotateAxis, rowTargetObjects.gotObjectIndex);
+            }
+            else
+            {
+                foreach (var item in columnTargetObjects.getObject)
+                {
+                    await item.GetComponent<BlockManager>().TurnBlock(rotateAxis);
+                }
+                BoardManager.instance.TurnBlock(rotateAxis, columnTargetObjects.gotObjectIndex);
+            }
+
+        }, AwaitOperation.Drop)
         .AddTo(this);
     }
 
@@ -100,34 +114,20 @@ public class InputReceiverController : MonoBehaviour
         }
     }
 
-    void CastMoveDirectionDecideRay(Vector3 direction)
+    (bool, Vector3) CastMoveDirectionDecideRay(Vector3 direction)
     {
 
         Ray ray = new Ray(transform.position, direction);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, directionDecideLayer.value))
         {
             Debug.Log("Hit: " + hit.collider.name);
-            selectedFace.turnDirectionDecidedSubject.OnNext(hit.collider.gameObject);
+            return selectedFace.CaughtTurnDirection(hit.collider.gameObject);
         }
-    }
 
-    public void BlockTurnEventPublish(Vector3 rotateAxis)
-    {
-        if (rotateDirectionIsVertical)
-        {
-            foreach (var item in rowTargetObjects.getObject)
-            {
-                item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(rotateAxis);
-            }
-            BoardManager.instance.TurnBlock(rotateAxis, rowTargetObjects.gotObjectIndex);
-        }
         else
         {
-            foreach (var item in columnTargetObjects.getObject)
-            {
-                item.GetComponent<BlockManager>().TurnBlockSubject.OnNext(rotateAxis);
-            }
-            BoardManager.instance.TurnBlock(rotateAxis, columnTargetObjects.gotObjectIndex);
+            Debug.LogError("CastMoveDirectionDecideRay: コライダーにヒットしませんでした");
+            return (false, Vector3.zero);
         }
     }
 }

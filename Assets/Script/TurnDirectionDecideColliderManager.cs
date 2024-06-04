@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class TurnDirectionDecideColliderManager : MonoBehaviour
 {
-    public Subject<GameObject> turnDirectionDecidedSubject = new Subject<GameObject>();
     public InputReceiverController inputReceiverController;
-    Observable<GameObject> turnDirectionDecidedObservable => turnDirectionDecidedSubject;
-
     [TabGroup("TurnDirection", "North")]
     [SerializeField]
     private GameObject northCollider;
@@ -33,31 +30,28 @@ public class TurnDirectionDecideColliderManager : MonoBehaviour
     [SerializeField]
     private Vector3 turnDirectionWest = -new Vector3(90, 90, 90);
 
-    void Start()
+    public (bool, Vector3) CaughtTurnDirection(GameObject collider)
     {
-        turnDirectionDecidedObservable
-            .Subscribe
-            (
-                x =>
-                {
-                    if (x == northCollider)
-                    {
-                        inputReceiverController.BlockTurnEventPublish(turnDirectionNorth);
-                    }
-                    else if (x == eastCollider)
-                    {
-                        inputReceiverController.BlockTurnEventPublish(turnDirectionEast);
-                    }
-                    else if (x == southCollider)
-                    {
-                        inputReceiverController.BlockTurnEventPublish(turnDirectionSouth);
-                    }
-                    else if (x == westCollider)
-                    {
-                        inputReceiverController.BlockTurnEventPublish(turnDirectionWest);
-                    }
-                }
-            )
-            .AddTo(this);
+        if (collider == northCollider)
+        {
+            return (true, turnDirectionNorth);
+        }
+        else if (collider == eastCollider)
+        {
+            return (false, turnDirectionEast);
+        }
+        else if (collider == southCollider)
+        {
+            return (true, turnDirectionSouth);
+        }
+        else if (collider == westCollider)
+        {
+            return (false, turnDirectionWest);
+        }
+        else
+        {
+            Debug.LogError("CaughtTurnDirection: 予期しないコライダーが渡されました");
+            return (false, Vector3.zero);
+        }
     }
 }

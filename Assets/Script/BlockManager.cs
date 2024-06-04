@@ -95,22 +95,13 @@ public class BlockManager : MonoBehaviour
     public Subject<Vector3> TurnBlockSubject = new Subject<Vector3>();
     Observable<Vector3> TurnBlockObservable => TurnBlockSubject;
     float prevVal;
-
-    void Start()
+    public async UniTask TurnBlock(Vector3 rotateAxis)
     {
-        TurnBlockObservable
-            .SubscribeAwait(async (rotateAxis, ct) =>
-                {
-                    Vector3 defaultPosition = transform.position;
-                    Vector3 defaultRotation = transform.rotation.eulerAngles;
-                    await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 1.0f)
-                        .AsyncWaitForCompletion();
-                    transform.position = defaultPosition;
-                    transform.rotation = Quaternion.Euler(defaultRotation);
-                },
-                AwaitOperation.Drop)
-                .AddTo(this);
-
+        Vector3 defaultPosition = transform.position;
+        Vector3 defaultRotation = transform.rotation.eulerAngles;
+        await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 1.0f).AsyncWaitForCompletion();
+        transform.position = defaultPosition;
+        transform.rotation = Quaternion.Euler(defaultRotation);
     }
 
     void RotatePivotAround(float rotateAngle, Vector3 rotateAxis)
