@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 public class FallingBlockManager : MonoBehaviour
 {
     public BoardManager boardManager;
-    public float fallInterval = 1.0f;
+    public float fallInterval = 120.0f;
     float fallIntervalCount = 0;
     void FixedUpdate()
     {

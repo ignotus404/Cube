@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 2, y: -1, z: 0}
+  objectArrayPosition: {x: 0, y: -1, z: 2}
 --- !u!1 &33961587
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,7 +1095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 0, y: -1, z: 1}
+  objectArrayPosition: {x: 1, y: -1, z: 0}
 --- !u!850595691 &154628667
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1689,7 +1689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 1, y: -1, z: 0}
+  objectArrayPosition: {x: 0, y: -1, z: 1}
 --- !u!1 &263070356
 GameObject:
   m_ObjectHideFlags: 0
@@ -4103,14 +4103,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReceiverController: {fileID: 1079719842}
-  northCollider: {fileID: 1395479736}
-  turnDirectionNorth: {x: 0, y: 0, z: 90}
-  eastCollider: {fileID: 1086669321}
-  turnDirectionEast: {x: -90, y: 0, z: 0}
-  southCollider: {fileID: 1291080349}
-  turnDirectionSouth: {x: 0, y: 0, z: -90}
-  westCollider: {fileID: 2037661963}
-  turnDirectionWest: {x: 90, y: 0, z: 0}
+  northCollider: {fileID: 1086669321}
+  turnDirectionNorth: {x: -90, y: 0, z: 0}
+  eastCollider: {fileID: 1291080349}
+  turnDirectionEast: {x: 0, y: 0, z: -90}
+  southCollider: {fileID: 2037661963}
+  turnDirectionSouth: {x: 90, y: 0, z: 0}
+  westCollider: {fileID: 1395479736}
+  turnDirectionWest: {x: 0, y: 0, z: 90}
 --- !u!1 &679835760
 GameObject:
   m_ObjectHideFlags: 0
@@ -4351,7 +4351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 0, y: -1, z: 2}
+  objectArrayPosition: {x: 2, y: -1, z: 0}
 --- !u!43 &709680365
 Mesh:
   m_ObjectHideFlags: 0
@@ -5682,14 +5682,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReceiverController: {fileID: 1079719842}
-  northCollider: {fileID: 1395479736}
-  turnDirectionNorth: {x: 0, y: 0, z: -90}
-  eastCollider: {fileID: 2037661963}
-  turnDirectionEast: {x: 90, y: 0, z: 0}
-  southCollider: {fileID: 1291080349}
-  turnDirectionSouth: {x: 0, y: 0, z: 90}
-  westCollider: {fileID: 1086669321}
-  turnDirectionWest: {x: -90, y: 0, z: 0}
+  northCollider: {fileID: 1086669321}
+  turnDirectionNorth: {x: 90, y: 0, z: 0}
+  eastCollider: {fileID: 1395479736}
+  turnDirectionEast: {x: 0, y: 0, z: -90}
+  southCollider: {fileID: 2037661963}
+  turnDirectionSouth: {x: -90, y: 0, z: 0}
+  westCollider: {fileID: 1291080349}
+  turnDirectionWest: {x: 0, y: 0, z: 90}
 --- !u!1 &964702818
 GameObject:
   m_ObjectHideFlags: 0
@@ -5831,7 +5831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 1, y: -1, z: 0}
+  objectArrayPosition: {x: 0, y: -1, z: 1}
 --- !u!1 &988593176
 GameObject:
   m_ObjectHideFlags: 0
@@ -7264,7 +7264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 0, y: -1, z: 1}
+  objectArrayPosition: {x: 1, y: -1, z: 0}
 --- !u!1 &1241281236
 GameObject:
   m_ObjectHideFlags: 0
@@ -7400,7 +7400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 0, y: -1, z: 2}
+  objectArrayPosition: {x: 2, y: -1, z: 0}
 --- !u!1 &1253692683
 GameObject:
   m_ObjectHideFlags: 0
@@ -7536,7 +7536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 1, y: -1, z: 2}
+  objectArrayPosition: {x: 2, y: -1, z: 1}
 --- !u!43 &1282654599
 Mesh:
   m_ObjectHideFlags: 0
@@ -7850,11 +7850,11 @@ MonoBehaviour:
   northCollider: {fileID: 940385617}
   turnDirectionNorth: {x: 0, y: 0, z: -90}
   eastCollider: {fileID: 2037661963}
-  turnDirectionEast: {x: 0, y: 90, z: 0}
+  turnDirectionEast: {x: 0, y: -90, z: 0}
   southCollider: {fileID: 671276791}
   turnDirectionSouth: {x: 0, y: 0, z: 90}
   westCollider: {fileID: 1086669321}
-  turnDirectionWest: {x: 0, y: -90, z: 0}
+  turnDirectionWest: {x: 0, y: 90, z: 0}
 --- !u!1 &1311893489
 GameObject:
   m_ObjectHideFlags: 0
@@ -10095,7 +10095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 2, y: -1, z: 1}
+  objectArrayPosition: {x: 1, y: -1, z: 2}
 --- !u!43 &1684442195
 Mesh:
   m_ObjectHideFlags: 0
@@ -10581,7 +10581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 1, y: -1, z: 2}
+  objectArrayPosition: {x: 2, y: -1, z: 1}
 --- !u!1 &1783845221
 GameObject:
   m_ObjectHideFlags: 0
@@ -10649,7 +10649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 2, y: -1, z: 0}
+  objectArrayPosition: {x: 0, y: -1, z: 2}
 --- !u!1001 &1794056719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11620,7 +11620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseOverColor: {r: 1, g: 0, b: 0, a: 1}
-  objectArrayPosition: {x: 2, y: -1, z: 1}
+  objectArrayPosition: {x: 1, y: -1, z: 2}
 --- !u!1 &2028330669
 GameObject:
   m_ObjectHideFlags: 0
@@ -11759,11 +11759,11 @@ MonoBehaviour:
   northCollider: {fileID: 940385617}
   turnDirectionNorth: {x: 90, y: 0, z: 0}
   eastCollider: {fileID: 1395479736}
-  turnDirectionEast: {x: 0, y: 90, z: 0}
+  turnDirectionEast: {x: 0, y: -90, z: 0}
   southCollider: {fileID: 671276791}
   turnDirectionSouth: {x: -90, y: 0, z: 0}
   westCollider: {fileID: 1291080349}
-  turnDirectionWest: {x: 0, y: -90, z: 0}
+  turnDirectionWest: {x: 0, y: 90, z: 0}
 --- !u!43 &2048447465
 Mesh:
   m_ObjectHideFlags: 0

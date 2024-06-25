@@ -5,9 +5,6 @@ using UnityEngine;
 using Alchemy.Inspector;
 using DG.Tweening;
 using SerializeDictionary;
-using Kogane;
-using TMPro;
-using System.Security.Cryptography.X509Certificates;
 
 public class Block
 {
@@ -99,7 +96,8 @@ public class BlockManager : MonoBehaviour
     {
         Vector3 defaultPosition = transform.position;
         Vector3 defaultRotation = transform.rotation.eulerAngles;
-        await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 1.0f).AsyncWaitForCompletion();
+        await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 0.3f)
+                    .AsyncWaitForCompletion();
         transform.position = defaultPosition;
         transform.rotation = Quaternion.Euler(defaultRotation);
     }
@@ -113,6 +111,7 @@ public class BlockManager : MonoBehaviour
 
     public void ReflectBlockColor(Block block)
     {
+        // Debug.Log("ReflectBlockColor");
         // ブロックの色を設定する処理
         if (block.existBlock)
         {

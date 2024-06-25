@@ -115,6 +115,26 @@ public class BoardManager : MonoBehaviour
         return targetObjectsArray;
     }
 
+    public List<GameObject> GetTurnTargetObjectsArray(in Vector3 index)
+    {
+        List<GameObject> targetObjectsArray = new List<GameObject>();
+        for (int xIndex = 0; xIndex < 3; xIndex++)
+        {
+            for (int yIndex = 0; yIndex < 3; yIndex++)
+            {
+                for (int zIndex = 0; zIndex < 3; zIndex++)
+                {
+                    if ((index.x == -1 || xIndex == index.x) && (index.y == -1 || yIndex == index.y) && (index.z == -1 || zIndex == index.z))
+                    {
+                        targetObjectsArray.Add(boardInterfaceBlockArray[xIndex][yIndex][zIndex]);
+                    }
+                }
+            }
+        }
+
+        return targetObjectsArray;
+    }
+
     public Block GetBoardBlock(in int xIndex, in int yIndex, in int zIndex)
     {
         if (xIndex < 0 || xIndex >= 3 || yIndex < 0 || yIndex >= 3 || zIndex < 0 || zIndex >= 3)
@@ -123,6 +143,16 @@ public class BoardManager : MonoBehaviour
             return new Block();
         }
         return cubeBlockArray[xIndex, yIndex, zIndex];
+    }
+
+    public Block GetBoardBlock(in Vector3 index)
+    {
+        if (index.x < 0 || index.x >= 3 || index.y < 0 || index.y >= 3 || index.z < 0 || index.z >= 3)
+        {
+            Debug.LogError("Invalid index");
+            return new Block();
+        }
+        return cubeBlockArray[(int)index.x, (int)index.y, (int)index.z];
     }
 
     public void SetBoardBlock(in int xIndex, in int yIndex, in int zIndex, in Block block)
@@ -137,8 +167,22 @@ public class BoardManager : MonoBehaviour
         ReflectBlockDataToInterfaceBlock();
     }
 
+    public void SetBoardBlock(in Vector3 index, in Block block)
+    {
+        if (index.x < 0 || index.x >= 3 || index.y < 0 || index.y >= 3 || index.z < 0 || index.z >= 3)
+        {
+            Debug.LogError("Invalid index");
+            return;
+        }
+        cubeBlockArray[(int)index.x, (int)index.y, (int)index.z] = block;
+        // Debug.Log("SetBoardBlock");
+        ReflectFaceBlockArray();
+        ReflectBlockDataToInterfaceBlock();
+    }
+
     public void ReflectFaceBlockArray()
     {
+        // Debug.Log("ReflectFaceBlockArray");
         // cubeBlockArrayを元に各面の表面にあたるブロックの配列を作成する
         for (int row = 0; row < 3; row++)
         {
@@ -241,6 +285,7 @@ public class BoardManager : MonoBehaviour
 
     public void ReflectBlockDataToInterfaceBlock()
     {
+        // Debug.Log("ReflectBlockDataToInterfaceBlock");
         for (int x = 0; x < 3; x++)
         {
             for (int y = 0; y < 3; y++)
@@ -254,97 +299,5 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void TurnBlock(Vector3 rotateAngle, Vector3 targetIndex)
-    {
-        Block[,,] newCubeBlockArray = new Block[3, 3, 3];
-        for (int x = 0; x < 3; x++)
-        {
-            for (int y = 0; y < 3; y++)
-            {
-                for (int z = 0; z < 3; z++)
-                {
-                    newCubeBlockArray[x, y, z] = cubeBlockArray[x, y, z];
-                }
-            }
-        }
 
-        if (rotateAngle.x != 0)
-        {
-            // X軸を中心に回転
-            int xIndex = (int)targetIndex.x;
-            Block[] tempBlockArray = new Block[3];
-            for (int i = 0; i < 3; i++)
-            {
-                tempBlockArray[i] = newCubeBlockArray[xIndex, i, (int)targetIndex.z];
-            }
-
-            if (rotateAngle.x > 0)
-            {
-                // 反時計回り
-                newCubeBlockArray[xIndex, 0, (int)targetIndex.z] = tempBlockArray[2];
-                newCubeBlockArray[xIndex, 1, (int)targetIndex.z] = tempBlockArray[0];
-                newCubeBlockArray[xIndex, 2, (int)targetIndex.z] = tempBlockArray[1];
-            }
-            else
-            {
-                // 時計回り
-                newCubeBlockArray[xIndex, 0, (int)targetIndex.z] = tempBlockArray[1];
-                newCubeBlockArray[xIndex, 1, (int)targetIndex.z] = tempBlockArray[2];
-                newCubeBlockArray[xIndex, 2, (int)targetIndex.z] = tempBlockArray[0];
-            }
-        }
-        else if (rotateAngle.y != 0)
-        {
-            // Y軸を中心に回転
-            int yIndex = (int)targetIndex.y;
-            Block[] tempBlockArray = new Block[3];
-            for (int i = 0; i < 3; i++)
-            {
-                tempBlockArray[i] = newCubeBlockArray[i, yIndex, (int)targetIndex.z];
-            }
-
-            if (rotateAngle.y > 0)
-            {
-                // 反時計回り
-                newCubeBlockArray[0, yIndex, (int)targetIndex.z] = tempBlockArray[2];
-                newCubeBlockArray[1, yIndex, (int)targetIndex.z] = tempBlockArray[0];
-                newCubeBlockArray[2, yIndex, (int)targetIndex.z] = tempBlockArray[1];
-            }
-            else
-            {
-                // 時計回り
-                newCubeBlockArray[0, yIndex, (int)targetIndex.z] = tempBlockArray[1];
-                newCubeBlockArray[1, yIndex, (int)targetIndex.z] = tempBlockArray[2];
-                newCubeBlockArray[2, yIndex, (int)targetIndex.z] = tempBlockArray[0];
-            }
-        }
-        else if (rotateAngle.z != 0)
-        {
-            // Z軸を中心に回転
-            int zIndex = (int)targetIndex.z;
-            Block[] tempBlockArray = new Block[3];
-            for (int i = 0; i < 3; i++)
-            {
-                tempBlockArray[i] = newCubeBlockArray[(int)targetIndex.x, i, zIndex];
-            }
-
-            if (rotateAngle.z > 0)
-            {
-                // 反時計回り
-                newCubeBlockArray[0, 0, zIndex] = tempBlockArray[2];
-                newCubeBlockArray[1, 0, zIndex] = tempBlockArray[0];
-                newCubeBlockArray[2, 0, zIndex] = tempBlockArray[1];
-            }
-            else
-            {
-                // 時計回り
-                newCubeBlockArray[0, 0, zIndex] = tempBlockArray[1];
-                newCubeBlockArray[1, 0, zIndex] = tempBlockArray[2];
-                newCubeBlockArray[2, 0, zIndex] = tempBlockArray[0];
-            }
-        }
-        cubeBlockArray = newCubeBlockArray;
-        ReflectFaceBlockArray();
-        ReflectBlockDataToInterfaceBlock();
-    }
 }
