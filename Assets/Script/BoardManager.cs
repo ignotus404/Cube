@@ -27,7 +27,7 @@ public class BoardManager : MonoBehaviour
     [LabelText("Interface用ブロックを子に持つオブジェクト")]
     [SerializeField]
     GameObject interfaceBlockParent;
-    List<List<List<GameObject>>> boardInterfaceBlockArray = new List<List<List<GameObject>>>();
+    List<List<List<GameObject>>> boardInterfaceBlockArray;
 
     void Awake()
     {
@@ -44,6 +44,7 @@ public class BoardManager : MonoBehaviour
 
     void Start()
     {
+        // ブロックの初期化
         cubeBlockArray = new Block[3, 3, 3];
         for (int x = 0; x < 3; x++)
         {
@@ -56,6 +57,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+        // 各面のブロック配列の初期化
         positiveXBlockArray.SetGridSize(new Vector2Int(3, 3));
         negativeXBlockArray.SetGridSize(new Vector2Int(3, 3));
         positiveYBlockArray.SetGridSize(new Vector2Int(3, 3));
@@ -75,6 +77,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+        // インターフェース用ブロックにアクセスする際に使う配列の初期化
         boardInterfaceBlockArray = new List<List<List<GameObject>>>();
         for (int x = 0; x < 3; x++)
         {
@@ -91,6 +94,8 @@ public class BoardManager : MonoBehaviour
             }
             boardInterfaceBlockArray.Add(xItems);
         }
+
+        // インターフェース用ブロックの初期化
         ReflectFaceBlockArray();
         ReflectBlockDataToInterfaceBlock();
     }
@@ -134,6 +139,8 @@ public class BoardManager : MonoBehaviour
 
         return targetObjectsArray;
     }
+
+    // TODO:  2次元配列で取得したいブロックの情報を取得するやつも作る
 
     public Block GetBoardBlock(in int xIndex, in int yIndex, in int zIndex)
     {
@@ -180,10 +187,15 @@ public class BoardManager : MonoBehaviour
         ReflectBlockDataToInterfaceBlock();
     }
 
+    // TODO:  配列で読み込んでセットできるやつも作る
+
+
+
     public void ReflectFaceBlockArray()
     {
         // Debug.Log("ReflectFaceBlockArray");
-        // cubeBlockArrayを元に各面の表面にあたるブロックの配列を作成する
+        // TODO:  cubeBlockArrayを元に各面の表面にあたるブロックの配列を作成する
+        // TODO:  ここの2次元辞書参照も外す
         for (int row = 0; row < 3; row++)
         {
             for (int column = 0; column < 3; column++)
@@ -193,7 +205,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        positiveXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["X"]["PositiveX"]);
+                        positiveXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["PositiveX"]);
                         break;
                     }
 
@@ -209,7 +221,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[depth, row, column].existBlock)
                     {
-                        negativeXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["X"]["NegativeX"]);
+                        negativeXBlockArray.SetCell(row, column, (int)cubeBlockArray[depth, row, column].blockFaceTypeDictionary["NegativeX"]);
                         break;
                     }
 
@@ -225,7 +237,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        positiveYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["Y"]["PositiveY"]);
+                        positiveYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["PositiveY"]);
                         break;
                     }
 
@@ -240,7 +252,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, depth, column].existBlock)
                     {
-                        negativeYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["Y"]["NegativeY"]);
+                        negativeYBlockArray.SetCell(row, column, (int)cubeBlockArray[row, depth, column].blockFaceTypeDictionary["NegativeY"]);
                         break;
                     }
 
@@ -255,7 +267,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        positiveZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["Z"]["PositiveZ"]);
+                        positiveZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["PositiveZ"]);
                         break;
                     }
 
@@ -270,7 +282,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (cubeBlockArray[row, column, depth].existBlock)
                     {
-                        negativeZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["Z"]["NegativeZ"]);
+                        negativeZBlockArray.SetCell(row, column, (int)cubeBlockArray[row, column, depth].blockFaceTypeDictionary["NegativeZ"]);
                         break;
                     }
 

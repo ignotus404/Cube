@@ -6,47 +6,13 @@ using Alchemy.Inspector;
 using DG.Tweening;
 using SerializeDictionary;
 
-public class Block
-{
-    public int blockXIndex;
-    public int blockYIndex;
-    public int blockZIndex;
-    public bool existBlock;
-    public Dictionary<string, Dictionary<string, FaceType>> blockFaceTypeDictionary;
+// 新しくスクリプトファイル作ってそこに記述
 
-    public Block(bool existBlock = false, FaceType[] faceTypeArray = null)
-    {
-        this.existBlock = existBlock;
-        this.blockFaceTypeDictionary = new Dictionary<string, Dictionary<string, FaceType>>();
-        if (faceTypeArray == null)
-        {
-            faceTypeArray = new FaceType[6]
-            {
-                FaceType.Blank,
-                FaceType.Blank,
-                FaceType.Blank,
-                FaceType.Blank,
-                FaceType.Blank,
-                FaceType.Blank
-            };
-        }
-        this.blockFaceTypeDictionary.Add("X", new Dictionary<string, FaceType> { { "PositiveX", faceTypeArray[0] }, { "NegativeX", faceTypeArray[1] } });
-        this.blockFaceTypeDictionary.Add("Y", new Dictionary<string, FaceType> { { "PositiveY", faceTypeArray[2] }, { "NegativeY", faceTypeArray[3] } });
-        this.blockFaceTypeDictionary.Add("Z", new Dictionary<string, FaceType> { { "PositiveZ", faceTypeArray[4] }, { "NegativeZ", faceTypeArray[5] } });
-    }
-}
 
-public enum FaceType
-{
-    Blank = -1,
-    Red = 0,
-    Blue = 1,
-    Green = 2,
-    Yellow = 3,
-    Orange = 4,
-    White = 5,
-}
 
+// ここからBlockManager.cs
+// 変数でBlockクラス持てるようにして、こいつ経由で情報に干渉するようにする
+// SetBlockもこっち二移動する
 public class BlockManager : MonoBehaviour
 {
     #region ブロックのオブジェクト、マテリアル
@@ -92,11 +58,13 @@ public class BlockManager : MonoBehaviour
     public Subject<Vector3> TurnBlockSubject = new Subject<Vector3>();
     Observable<Vector3> TurnBlockObservable => TurnBlockSubject;
     float prevVal;
-    public async UniTask TurnBlock(Vector3 rotateAxis)
+
+
+    public async UniTask TurnBlock(Vector3 rotateAxis, float rotateTime)
     {
         Vector3 defaultPosition = transform.position;
         Vector3 defaultRotation = transform.rotation.eulerAngles;
-        await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, 0.3f)
+        await DOTween.To(x => RotatePivotAround(x, rotateAxis), 0, 90, rotateTime)
                     .AsyncWaitForCompletion();
         transform.position = defaultPosition;
         transform.rotation = Quaternion.Euler(defaultRotation);
@@ -111,7 +79,6 @@ public class BlockManager : MonoBehaviour
 
     public void ReflectBlockColor(Block block)
     {
-        // Debug.Log("ReflectBlockColor");
         // ブロックの色を設定する処理
         if (block.existBlock)
         {

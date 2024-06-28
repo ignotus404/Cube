@@ -11,6 +11,7 @@ public class MouseOverDetectColliderManager : MonoBehaviour
     public Vector3 objectArrayPosition;
 
     private Renderer rendererComponent;
+    // TODO:  これも消す
     void Start()
     {
         rendererComponent = GetComponent<Renderer>();

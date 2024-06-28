@@ -1,0 +1,28 @@
+
+Todo:
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/Block.cs
+     ☐ // TODO: コンストラクタの最適化を行う @file:///c%3A/Users/aceto/Cube/Assets/Script/Block.cs#10 
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/BlockManager.cs
+    ☐ public async UniTask TurnBlock(Vector3 rotateAxis) // TODO: rotareAxisの中身が(1, 0, 0)などのベクトルになるようにする @file:///c%3A/Users/aceto/Cube/Assets/Script/BlockManager.cs#63
+    ☐ // TODO: 90度回転する処理にかかる時間をインスペクターで設定できるようにする @file:///c%3A/Users/aceto/Cube/Assets/Script/BlockManager.cs#67
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/BoardManager.cs
+    ☐ // TODO:  2次元配列で取得したいブロックの情報を取得するやつも作る @file:///c%3A/Users/aceto/Cube/Assets/Script/BoardManager.cs#143
+    ☐ // TODO:  配列で読み込んでセットできるやつも作る @file:///c%3A/Users/aceto/Cube/Assets/Script/BoardManager.cs#190
+    ☐ // TODO:  cubeBlockArrayを元に各面の表面にあたるブロックの配列を作成する @file:///c%3A/Users/aceto/Cube/Assets/Script/BoardManager.cs#197
+    ☐ // TODO:  ここの2次元辞書参照も外す @file:///c%3A/Users/aceto/Cube/Assets/Script/BoardManager.cs#198
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs
+    ☐ // TODO:  下の2つなくても動くようにする @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#24
+    ☐ /* TODO:  ここで動くオブジェクト群を取得するようにする @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#40
+    ☐ // TODO:  lookable 起動時wasdでカメラ90度回転できるようにする @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#97
+    ☐ // TODO:  マウスオーバー時UIが光る機能のみ搭載 @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#110
+    ☐ // TODO:  以下の処理を消す @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#112
+    ☐ // TODO:  ここの中身も消す @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#183
+    ☐ // TODO:  何かしらの手段でどこの軸か、正負どっちかを取得する @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#184
+    ☐ // TODO:  それをもとに回転方向をVector3で返す @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#185
+    ☐ // TODO:  引数としてどの面にマウスオーバーしたかを取得する @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#186
+    ☐ // TODO:  3x3の配列を回転させるやつ作る @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#201
+    ☐ // TODO:  こいつ自体はBlockManagerに移動する @file:///c%3A/Users/aceto/Cube/Assets/Script/InputReceiverController.cs#204
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/MouseOverDetectColliderManager.cs
+    ☐ // TODO:  これも消す @file:///c%3A/Users/aceto/Cube/Assets/Script/MouseOverDetectColliderManager.cs#14
+  @file:///c%3A/Users/aceto/Cube/Assets/Script/TurnDirectionDecideColliderManager.cs
+    ☐ // TODO:  このスクリプトなくす @file:///c%3A/Users/aceto/Cube/Assets/Script/TurnDirectionDecideColliderManager.cs#33 
